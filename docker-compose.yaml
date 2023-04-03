@@ -17,10 +17,10 @@ services:
       redis:
         condition: service_healthy
     environment:
-      JAVA_HOME: "/usr/lib/jvm/java-1.8.0-openjdk-amd64"
+      JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-amd64"
       RAILS_ENV: development
       REDIS_HOST: redis
-    entrypoint: ["/app/docker_entrypoint.sh"]
+    entrypoint: ["/bin/bash","docker_entrypoint.sh"]
     restart: on-failure:3
     command: /bin/sh "while sleep 1000; do :; done"
   redis:
