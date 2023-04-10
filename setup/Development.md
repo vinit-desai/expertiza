@@ -48,7 +48,7 @@ Follow the instructions below to configure the Expertiza development environment
    ```
 3. Choose a name from the `users` table according to the role, and use this `name` to log in with the password set to `password` for all users.
 
-## Access installation of Expertiza from outside the VCL (Optional)
+## Permit access to installation of Expertiza from outside the VCL (Optional)
 ```bash
 iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport 8080 -j ACCEPT
 ufw allow 8080 # (run again if it fails)
@@ -56,7 +56,7 @@ ufw reload
 rails s -p 8080 -b <IP address of VCL>
 ```
 
-Verify the Expertiza installation
+Verify the Expertiza installation:
 Open up Google Chrome and type in the URL: `<IP address of VCL>:8080`
 
 Congratulations! You have successfully set up Expertiza on your VCL image and can now start working on your project.
