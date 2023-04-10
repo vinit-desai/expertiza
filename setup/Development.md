@@ -1,9 +1,9 @@
 Expertiza Development Environment
 =================================
+Follow the instructions below to configure the Expertiza development environment on your VCL image:
 
-## Follow these steps to set up Expertiza on your VCL image:
-
-1. Reserve the VCL Image, `CSC-517 Expertiza Development Environment`
+## Setting Up Expertiza
+1. Reserve the `CSC-517 Expertiza Development Environment` VCL Image.
 
 2. Copy the `/root/setup_expertiza.sh` script to your home directory.
 
@@ -26,7 +26,7 @@ Expertiza Development Environment
    ```sql
    username: dev
    ```
-9. Change directory to your project
+9. Navigate to your project directory:
    ```bash
    cd <project_dir>
    ```
@@ -36,17 +36,17 @@ Expertiza Development Environment
     ```
 ## Work on the local application
 
-1. Login to the MySQL database using:
+1. Log in to the MySQL database using:
    ```bash
    mysql -u dev -proot
    ```
-2. Then run these SQL commands to see the available user logins:
+2. Execute the following SQL commands to view available user logins:
    ```sql
    show databases;
    use expertiza_development;
    select name, role_id from users limit 25;
    ```
-3. Use the name from the `users` table according to the role and use this `name` to login with password being `password` for all users.
+3. Choose a name from the `users` table according to the role, and use this `name` to log in with the password set to `password` for all users.
 
 ## Access installation of Expertiza from outside the VCL (Optional)
 ```bash
@@ -59,4 +59,4 @@ rails s -p 8080 -b <IP address of VCL>
 Verify the Expertiza installation
 Open up Google Chrome and type in the URL: `<IP address of VCL>:8080`
 
-That's it! You've successfully set up Expertiza on your VCL image and can start working on your project.
+Congratulations! You have successfully set up Expertiza on your VCL image and can now start working on your project.
