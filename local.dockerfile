@@ -21,6 +21,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 
 # Install Ruby dependencies
 RUN gem install rjb -v '1.6.5' --source 'https://rubygems.org/'
+RUN bundle update
 RUN bundle install
 RUN bundle config set --local path 'vendor/cache'
 
