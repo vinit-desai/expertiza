@@ -1,0 +1,99 @@
+---
+- name: Setup Expertiza System
+  hosts: node
+
+  vars:
+    user: sjain29
+    user_home: "/home/{{ user }}"
+    app_root: "{{ user_home }}/expertiza"
+    ruby_version: 3.2.1
+
+  tasks:
+   # Required Installation
+    - name: Install NodeJs
+      ansible.builtin.shell: |
+        curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+        sudo apt-get install -y nodejs
+
+    - name: Install Bower
+      become: true
+      community.general.npm:
+        name: bower
+        global: true
+
+    - name: Install Java
+      become: true
+      ansible.builtin.shell: |
+        wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+        tar -zxvf openjdk-11+28_linux-x64_bin.tar.gz -C /usr
+      
+      
+    - name: Install rbenv dependencies
+      become: true
+      apt:
+        name: [git, curl, libssl-dev, libreadline-dev, zlib1g-dev, autoconf, bison, build-essential, libyaml-dev, libncurses5-dev, libffi-dev, libgdbm-dev]
+        state: present
+      
+        
+    - name: Install Rbenv and Ruby-build
+      ansible.builtin.shell: |
+        git clone https://github.com/rbenv/rbenv.git  "{{ user_home }}/.rbenv"
+        git clone https://github.com/rbenv/ruby-build.git  "{{ user_home }}/.rbenv/plugins/ruby-build"
+        
+    - name: Add Java and rbenv to PATH
+      ansible.builtin.blockinfile:
+        path: "{{ user_home }}/.bashrc"
+        block: |
+          export PATH=$PATH:/usr/jdk-11/bin
+          export JAVA_HOME=/usr/jdk-11
+          export PATH="{{ user_home }}/.rbenv/bin:$PATH"
+          export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+          eval "$(rbenv init - bash)"
+        
+    - name: Install Ruby
+      ansible.builtin.shell: |
+        "{{ user_home }}/.rbenv/bin/rbenv" install --verbose "{{ ruby_version }}"
+        "{{ user_home }}/.rbenv/bin/rbenv" global "{{ ruby_version }}"
+      
+    - name: Install MySQL and Redis
+      become: true
+      apt:
+        name: [mysql-server, mysql-client, libmysqlclient-dev, redis-server]
+        state: present
+
+    - name: Restart MySQL and Redis service
+      become: true
+      ansible.builtin.shell: |
+        systemctl enable mysql
+        systemctl restart mysql
+        redis-server > /dev/null 2>&1 &
+        systemctl enable --now redis-server
+
+    # Expertiza clone repo, install gems
+    - name: Clone Expertiza repository
+      ansible.builtin.git:
+        repo: https://github.com/shubhangij12/test-expertiza
+        dest: "{{ app_root }}"
+        clone: yes
+        update: no
+        version: main
+
+    - name: Copy config/database.yml.example to config/database.yml
+      ansible.builtin.copy:
+        src: "{{ app_root }}/config/database.yml.example"
+        dest: "{{ app_root }}/config/database.yml"
+        owner: "{{ user }}"
+        mode: '0644'
+        remote_src: yes
+
+    - name: Copy config/secrets.yml.example to config/secrets.yml
+      ansible.builtin.copy:
+        src: "{{ app_root }}/config/secrets.yml.example"
+        dest: "{{ app_root }}/config/secrets.yml"
+        owner: "{{ user }}"
+        mode: '0644'
+        remote_src: yes
+
+    - name: Install packages based on bower.json
+      community.general.bower:
+        path: "{{ app_root }}"
