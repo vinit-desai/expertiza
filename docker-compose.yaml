@@ -20,9 +20,8 @@ services:
       JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-amd64"
       RAILS_ENV: development
       REDIS_HOST: redis
-    entrypoint: ["/bin/bash","docker_entrypoint.sh"]
     restart: on-failure:3
-    command: /bin/sh "while sleep 1000; do :; done"
+    command: tail -f /dev/null
   redis:
     image: redis
     ports:
@@ -34,6 +33,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
+      # - ./expertiza.sql:/docker-entrypoint-initdb.d/expertiza.sql
       - ./expertiza-db:/var/lib/mysql:rw
     environment:
       MYSQL_ROOT_PASSWORD: expertiza
