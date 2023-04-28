@@ -14,6 +14,8 @@ RUN npm install -g bower
 RUN bower install --allow-root
 RUN gem install rspec
 RUN apt-get install -y openjdk-11-jdk
+RUN apt-get install -y default-mysql-client
+RUN apt-get install default-libmysqlclient-dev
 
 # Set the JAVA_HOME environment variable
 ENV JAVA_HOME /usr/lib/jvm/java-11-openjdk-amd64
