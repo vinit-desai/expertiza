@@ -5,7 +5,7 @@
 1) Install [docker](https://www.docker.com/get-started) 
 2) Install [VSCode](https://code.visualstudio.com/download)
 3) Install [RemoteContainers VsCode Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
-4) Check that you have docker and docker-compose
+4) Check that you have docker and docker-compose(v2)
 (Mac / Linux)
 ```
 docker -v 
@@ -29,22 +29,17 @@ Detached (closing terminal does not close expertiza):
 
 7) You can verify that everything is running by using `docker ps`
 
-**NOTE This may take 5-10 minutes to set up the database and migrate on the first run!!**
-
-You should see mysql (healthy)
-and redis (healthy)
-and expertiza_web
+You should see `expertiza-mysql-1`, `expertiza-redis-1` and `expertiza-web-1`
 
 8) Getting terminal access to your instance of expertiza (running in a container!)
 In VSCode click the green icon in the bottom left.
 
-Select 
-`Remote Containers: Open Locally` 
-or 
-`Remote Containers: Reopen Locally`
+Select `Attach to Running Container...` > `expertiza-web-1`
 
 9) VSCode will install ruby extensions and you can click the plus button on the right to get a new
 terminal.
+
+10) Initialize database using `sh docker_entrypoint.sh`
 
 10) Run `bundle exec rails s -b 0.0.0.0`
 
