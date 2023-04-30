@@ -70,6 +70,10 @@ Port: 6379
 If you are inside the container (vscode terminal that has root@random-numbers-here) use the same credentials but change host/ip to `redis`.
 
 
+## Video Demonstration
+Check out the [demo](https://drive.google.com/file/d/10lzVOpo-iDQhDwPH4E66piN9AS7Lou4y/view?usp=share_link) to setup the environment.
+
+
 ## More about docker
 
 Docker containers allow you to run a much more efficient "virtual machine" or "container" than traditional VMs.
